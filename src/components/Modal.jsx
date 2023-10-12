@@ -10,7 +10,7 @@ export default function Modal({ isVisible, onClose, children }) {
       id="wrapper"
       onClick={handleClose}
     >
-      <div className="w-[450px] flex flex-col">
+      <div className="w-fit flex flex-col">
         <button className="text-white text-xl place-self-end" onClick={onClose}>
           X
         </button>

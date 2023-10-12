@@ -5,6 +5,7 @@ import StorePage from '../pages/StorePage';
 import ProductPage from '../pages/ProductPage';
 import CartPage from '../pages/CartPage';
 import ProfilePage from '../pages/ProfilePage';
+import Authenticated from '../components/auth/Authenticated';
 
 const router = createBrowserRouter([
   {
@@ -12,12 +13,27 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: '', element: <HomePage /> },
-      { path: 'profile', element: <ProfilePage /> },
       { path: 'store', element: <StorePage /> },
-      { path: 'product/:productId', element: <ProductPage /> },
+      { path: 'product', element: <ProductPage /> },
       { path: 'cart', element: <CartPage /> },
+      {
+        path: 'profile',
+        element: (
+          <Authenticated>
+            <ProfilePage />
+          </Authenticated>
+        ),
+      },
     ],
   },
+  // {
+  //   path: '/',
+  //   element: (
+  //     <Authenticated>
+  //       <ProfilePage />
+  //     </Authenticated>
+  //   ),
+  // },
 ]);
 
 export default function Route() {

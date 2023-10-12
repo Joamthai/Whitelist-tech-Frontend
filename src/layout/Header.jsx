@@ -7,10 +7,15 @@ import Menu from './Menu';
 import Modal from '../components/Modal';
 import SignUpForm from '../components/auth/SignUpForm';
 import LoginForm from '../components/auth/LoginForm';
+import useAuth from '../hooks/use-auth';
+import { getAccessToken } from '../utils/local-storage';
 
 export default function Header() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+
+  const { authUser } = useAuth();
+
   return (
     <>
       <header className="flex justify-between px-4 border bg-white h-20">
@@ -30,32 +35,48 @@ export default function Header() {
           <Link to="/cart">
             <FaCartShopping className="text-2xl text-neutral-400" />
           </Link>
-          <button
-            className="bg-neutral-100 border  border-neutral-400 rounded-full px-4 py-1.5 text-lg text-neutral-500"
-            onClick={() => setShowLoginModal(true)}
-          >
-            Login
-          </button>
+          {getAccessToken() ? (
+            <span className="text-xl  text-neutral-500 cursor-pointer hover:underline">
+              {`Hi, ${authUser.firstName}`}
+            </span>
+          ) : (
+            <>
+              <button
+                className="bg-neutral-100 border  border-neutral-400 rounded-full px-4 py-1.5 text-lg text-neutral-500"
+                onClick={() => setShowLoginModal(true)}
+              >
+                Login
+              </button>
 
-          <button
-            className="bg-neutral-100 border border-neutral-400 rounded-full px-4 py-1.5 text-lg text-neutral-500"
-            onClick={() => setShowSignUpModal(true)}
-          >
-            Sign up
-          </button>
+              <button
+                className="bg-neutral-100 border border-neutral-400 rounded-full px-4 py-1.5 text-lg text-neutral-500"
+                onClick={() => setShowSignUpModal(true)}
+              >
+                Sign up
+              </button>
+            </>
+          )}
         </div>
       </header>
       <Modal
         isVisible={showLoginModal}
         onClose={() => setShowLoginModal(false)}
       >
-        <LoginForm />
+        <LoginForm
+          onCloseModal={() => {
+            setShowLoginModal(false);
+          }}
+        />
       </Modal>
       <Modal
         isVisible={showSignUpModal}
         onClose={() => setShowSignUpModal(false)}
       >
-        <SignUpForm />
+        <SignUpForm
+          onCloseModal={() => {
+            setShowSignUpModal(false);
+          }}
+        />
       </Modal>
     </>
   );

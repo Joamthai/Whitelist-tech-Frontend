@@ -10,8 +10,8 @@ export default function ProfileForm() {
       {authUser ? (
         <>
           <div className="flex gap-2">
-            <UserInfo col="flex-1" name="firstName" inputTitle="First Name" />
-            <UserInfo col="flex-1" name="lastName" inputTitle="Last Name" />
+            <UserInfo style="flex-1" name="firstName" inputTitle="First Name" />
+            <UserInfo style="flex-1" name="lastName" inputTitle="Last Name" />
           </div>
           <UserInfo name="email" inputTitle="Email" />
           <UserInfo name="mobile" inputTitle="Mobile" />
@@ -20,8 +20,8 @@ export default function ProfileForm() {
       ) : (
         <>
           <div className="flex gap-2">
-            <Input col="flex-1" name="firstName" inputTitle="First Name" />
-            <Input col="flex-1" name="lastName" inputTitle="Last Name" />
+            <Input style="flex-1" name="firstName" inputTitle="First Name" />
+            <Input style="flex-1" name="lastName" inputTitle="Last Name" />
           </div>
           <Input name="email" inputTitle="Email" />
           <Input name="mobile" inputTitle="Mobile" />

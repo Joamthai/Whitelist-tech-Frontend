@@ -4,13 +4,13 @@ import useAuth from '../../hooks/use-auth';
 
 export default function UserInfo({
   type = 'text',
-  col = '',
+  style = '',
   name,
   inputTitle,
 }) {
   const { authUser } = useAuth();
   return (
-    <div className={`${col}`}>
+    <div className={`${style}`}>
       <h1>{inputTitle} :</h1>
       <p
         type={type}

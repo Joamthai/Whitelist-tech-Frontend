@@ -8,7 +8,7 @@ import Modal from '../components/Modal';
 import SignUpForm from '../components/auth/SignUpForm';
 import LoginForm from '../components/auth/LoginForm';
 import useAuth from '../hooks/use-auth';
-import { getAccessToken } from '../utils/local-storage';
+import DropDown from '../components/DropDown';
 
 export default function Header() {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -18,7 +18,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="flex justify-between px-4 border bg-white h-20">
+      <header className="flex justify-between px-10 border bg-white h-20">
         <Link to="/" className="flex items-center gap-6 ">
           <AiOutlinePoweroff className="text-6xl " />
           <div className="text-4xl font-semibold">Whitelist-Tech</div>
@@ -26,7 +26,7 @@ export default function Header() {
         <div className="flex items-center gap-8 text-lg text-neutral-500 ">
           <Menu />
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex justify-between items-center gap-4">
           <input
             type="text"
             placeholder="Search for..."
@@ -35,10 +35,10 @@ export default function Header() {
           <Link to="/cart">
             <FaCartShopping className="text-2xl text-neutral-400" />
           </Link>
-          {getAccessToken() ? (
-            <span className="text-xl  text-neutral-500 cursor-pointer hover:underline">
-              {`Hi, ${authUser.firstName}`}
-            </span>
+          {authUser ? (
+            <>
+              <DropDown />
+            </>
           ) : (
             <>
               <button

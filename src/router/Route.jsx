@@ -6,6 +6,7 @@ import ProductPage from '../pages/ProductPage';
 import CartPage from '../pages/CartPage';
 import ProfilePage from '../pages/ProfilePage';
 import Authenticated from '../components/auth/Authenticated';
+import OrderPage from '../pages/OrderPage';
 
 const router = createBrowserRouter([
   {
@@ -26,14 +27,18 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: '/',
-  //   element: (
-  //     <Authenticated>
-  //       <ProfilePage />
-  //     </Authenticated>
-  //   ),
-  // },
+  {
+    path: '/',
+    element: (
+      <Authenticated>
+        <Layout />
+      </Authenticated>
+    ),
+    children: [
+      { path: 'profile', element: <ProfilePage /> },
+      { path: 'order', element: <OrderPage /> },
+    ],
+  },
 ]);
 
 export default function Route() {

@@ -1,6 +1,6 @@
-export default function Input({ type = 'text', col = '', name, inputTitle }) {
+export default function Input({ type = 'text', style = '', name, inputTitle }) {
   return (
-    <div className={`${col}`}>
+    <div className={`${style}`}>
       <h1>{inputTitle} :</h1>
       <input
         type={type}

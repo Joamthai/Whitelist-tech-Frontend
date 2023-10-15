@@ -4,20 +4,20 @@ import { ActionButton, ArrowButton } from '../components/ActionButton';
 export default function HomePage() {
   return (
     <div className="mx-16">
-      <div className=" flex flex-col justify-center items-center h-[800px] gap-2 ">
+      <div className=" flex flex-col justify-center items-center h-[800px] gap-2 z-10">
         <img
           src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697127392/gwI54viPFVYGDdbTWc3aT9erBA_faxp3d.webp"
           className="absolute top-24 right-0 h-auto max-w-sm rounded-lg shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30"
           alt=""
         />
-        <h1 className="text-center text-6xl m-4">
+        <h1 className="text-center text-6xl m-4 z-30">
           High-quality tech gadgets <br /> & accessories
         </h1>
         <p className="text-xl text-center text-neutral-500">
           Shop our curated selection of premium products,
           <br /> designed to elevate your everyday experiences
         </p>
-        <div>
+        <div className="flex gap-8 m-4">
           <ActionButton title="Browse products" style="bg-black text-white" />
           <ActionButton
             title="About us"

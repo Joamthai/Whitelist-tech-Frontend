@@ -1,9 +1,9 @@
 import { BsArrowRight } from 'react-icons/bs';
 
-export function ActionButton({ title, style = ' ', py = 'py-3' }) {
+export function ActionButton({ title, style = ' ' }) {
   return (
     <button
-      className={`max-w-fit max-h-fit px-4 ${py} rounded-full text-lg m-4 hover:shadow-lg hover:shadow-black/30 transition-shadow duration-300 ease-in-out ${style} `}
+      className={`max-w-fit max-h-fit px-4 py-3 rounded-full text-lg hover:shadow-lg hover:shadow-black/30 transition-shadow duration-300 ease-in-out ${style} `}
     >
       {title}
     </button>

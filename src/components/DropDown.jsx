@@ -8,7 +8,7 @@ export default function DropDown() {
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => setIsOpen(false);
   return (
-    <div className="relative">
+    <div className="relative z-50">
       <span
         className="text-xl  text-neutral-500 cursor-pointer hover:underline"
         onClick={() => setIsOpen(!isOpen)}

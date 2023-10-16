@@ -26,7 +26,7 @@ const validateAddProduct = (input) => {
   }
 };
 
-export default function AddProductForm({ onSubmit, onClose }) {
+export default function AddProductForm({ createProduct, onClose }) {
   const [input, setInput] = useState({
     name: '',
     description: '',
@@ -44,9 +44,11 @@ export default function AddProductForm({ onSubmit, onClose }) {
   const handleSubmitForm = (e) => {
     e.preventDefault();
     const validationError = validateAddProduct(input);
-    if (validationError) return setError(validationError);
-    setError({});
-    onSubmit(input)
+    if (validationError) {
+      return setError(validationError);
+    }
+    // setError({});
+    createProduct(input)
       .then(() => onClose())
       .catch((error) => {
         throw error;

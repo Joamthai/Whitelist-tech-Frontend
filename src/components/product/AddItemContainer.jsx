@@ -19,7 +19,7 @@ export default function AddItemContainer({ createProduct }) {
         onClose={() => setShowProductModal(false)}
       >
         <AddProductForm
-          onSubmit={createProduct}
+          createProduct={createProduct}
           onClose={() => setShowProductModal(false)}
         />
       </Modal>

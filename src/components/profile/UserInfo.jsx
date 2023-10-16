@@ -1,5 +1,4 @@
-import { CiEdit } from 'react-icons/ci';
-
+import { BiEdit } from 'react-icons/bi';
 import useAuth from '../../hooks/use-auth';
 
 export default function UserInfo({
@@ -18,7 +17,7 @@ export default function UserInfo({
         className="flex justify-between items-center border border-neutral-400 rounded-xl px-4 py-1 bg-neutral-100 w-full"
       >
         {authUser[name] || '-'}
-        <CiEdit className="cursor-pointer" />
+        <BiEdit className="cursor-pointer text-neutral-500 text-lg" />
       </p>
     </div>
   );

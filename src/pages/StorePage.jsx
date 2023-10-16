@@ -7,7 +7,6 @@ import ItemList from '../components/product/ItemList';
 
 export default function StorePage() {
   const [allProducts, setAllProducts] = useState([]);
-
   const { authUser } = useAuth();
 
   const createProduct = async (data) => {
@@ -19,7 +18,7 @@ export default function StorePage() {
   const deleteProduct = async (productId) => {
     try {
       await axios.delete(`/product/${productId}`);
-      setAllProducts(allProducts.filter((el) => el.id !== productId));
+      setAllProducts(allProducts.filter((product) => product.id !== productId));
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +26,7 @@ export default function StorePage() {
 
   useEffect(() => {
     axios
-      .get('/product/')
+      .get('/product')
       .then((res) => {
         setAllProducts(res.data.products);
       })

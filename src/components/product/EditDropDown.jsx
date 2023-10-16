@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 
-export default function EditDropDown({ productObj, deleteProduct }) {
+export default function EditDropDown({ product, deleteProduct }) {
   const [isOpen, setIsOpen] = useState(false);
-  const handleClickDelete = () => deleteProduct(productObj.id);
+  const handleClickDelete = () => deleteProduct(product.id);
   return (
     <>
       <BsThreeDots onClick={() => setIsOpen(!isOpen)} />

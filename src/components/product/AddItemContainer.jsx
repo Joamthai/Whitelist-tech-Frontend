@@ -3,7 +3,7 @@ import Modal from '../Modal';
 import { useState } from 'react';
 import AddProductForm from './AddProductForm';
 
-export default function AddItemContainer({ createProduct }) {
+export default function AddItemContainer({ allCategory, createProduct }) {
   const [showProductModal, setShowProductModal] = useState(false);
 
   return (
@@ -19,6 +19,7 @@ export default function AddItemContainer({ createProduct }) {
         onClose={() => setShowProductModal(false)}
       >
         <AddProductForm
+          allCategory={allCategory}
           createProduct={createProduct}
           onClose={() => setShowProductModal(false)}
         />

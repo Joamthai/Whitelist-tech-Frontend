@@ -3,6 +3,7 @@ import { ActionButton } from '../ActionButton';
 import Input from '../profile/Input';
 import { useState } from 'react';
 import InputMessageError from '../auth/InputMessageError';
+import useProduct from '../../hooks/use-product';
 
 const addProductSchema = Joi.object({
   name: Joi.string().required(),
@@ -26,33 +27,48 @@ const validateAddProduct = (input) => {
   }
 };
 
-export default function AddProductForm({ createProduct, onClose }) {
+export default function AddProductForm({
+  product,
+  allCategory,
+
+  updateProduct,
+  onClose,
+}) {
+  const { createProduct } = useProduct();
   const [input, setInput] = useState({
-    name: '',
-    description: '',
-    image: '',
-    stock: '',
-    price: '',
-    categoryId: '',
+    name: product?.name ?? '',
+    description: product?.description ?? '',
+    image: product?.image ?? '',
+    stock: product?.stock ?? '',
+    price: product?.price ?? '',
+    categoryId: product?.categoryId ?? '',
   });
   const [error, setError] = useState({});
-
+  console.log(allCategory);
   const handleChangeInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  const handleSubmitForm = (e) => {
-    e.preventDefault();
-    const validationError = validateAddProduct(input);
-    if (validationError) {
-      return setError(validationError);
+  const handleSubmitForm = async (e) => {
+    try {
+      e.preventDefault();
+      const validationError = validateAddProduct(input);
+      if (validationError) {
+        return setError(validationError);
+      }
+      setError({});
+      if (product) {
+        console.log(product);
+        const newProduct = { ...product, ...input };
+        console.log(newProduct);
+        // updateProduct(newProduct);
+      } else {
+        createProduct(input);
+      }
+      onClose();
+    } catch (error) {
+      console.log(error);
     }
-    // setError({});
-    createProduct(input)
-      .then(() => onClose())
-      .catch((error) => {
-        throw error;
-      });
   };
 
   return (
@@ -92,9 +108,9 @@ export default function AddProductForm({ createProduct, onClose }) {
               onChange={handleChangeInput}
             >
               <option></option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
+              {allCategory.map((category) => (
+                <option key={category.id}>{category.name}</option>
+              ))}
             </select>
           </div>
           <Input

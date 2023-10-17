@@ -7,12 +7,18 @@ import ItemList from '../components/product/ItemList';
 
 export default function StorePage() {
   const [allProducts, setAllProducts] = useState([]);
+  const [allCategory, setAllCategory] = useState([]);
   const { authUser } = useAuth();
 
   const createProduct = async (data) => {
     const res = await axios.post('/product', data);
     const newProduct = res.data.product;
     setAllProducts([newProduct, ...allProducts]);
+  };
+
+  const updateProduct = async (data) => {
+    const res = await axios.patch('/product', data);
+    console.log(res);
   };
 
   const deleteProduct = async (productId) => {
@@ -29,6 +35,7 @@ export default function StorePage() {
       .get('/product')
       .then((res) => {
         setAllProducts(res.data.products);
+        setAllCategory(res.data.category);
       })
       .catch((error) => {
         throw error;
@@ -41,9 +48,9 @@ export default function StorePage() {
       <div className="flex justify-between items-center mb-7">
         <div className="flex gap-8">
           <CategoryButton title="All" />
-          <CategoryButton title="GEAR" />
-          <CategoryButton title="TECHNOLOGY" />
-          <CategoryButton title="ACCESSORY" />
+          {allCategory.map((category) => (
+            <CategoryButton key={category.id} title={category.name} />
+          ))}
         </div>
         <IoFilterSharp className="text-3xl cursor-pointer" />
       </div>
@@ -51,7 +58,9 @@ export default function StorePage() {
       <ItemList
         authUser={authUser}
         allProducts={allProducts}
+        allCategory={allCategory}
         createProduct={createProduct}
+        updateProduct={updateProduct}
         deleteProduct={deleteProduct}
       />
     </div>

@@ -5,11 +5,7 @@ import Modal from '../Modal';
 import EditDropDown from './EditDropDown';
 import AddProductForm from './AddProductForm';
 
-export default function ItemContainer({
-  product,
-  updateProduct,
-  deleteProduct,
-}) {
+export default function ItemContainer({ product }) {
   const { authUser } = useAuth();
   const [showProductModal, setShowProductModal] = useState(false);
   return (
@@ -22,7 +18,6 @@ export default function ItemContainer({
           {!getAccessToken() || authUser.role === 'USER' ? null : (
             <EditDropDown
               product={product}
-              deleteProduct={deleteProduct}
               onClick={() => setShowProductModal(true)}
             />
           )}
@@ -47,7 +42,6 @@ export default function ItemContainer({
       >
         <AddProductForm
           product={product}
-          updateProduct={updateProduct}
           onClose={() => setShowProductModal(false)}
         />
       </Modal>

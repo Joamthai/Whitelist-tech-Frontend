@@ -11,12 +11,11 @@ const addProductSchema = Joi.object({
   image: Joi.string().required(),
   stock: Joi.number().integer().positive().required(),
   price: Joi.number().precision(2).positive().required(),
-  categoryId: Joi.string().required(),
+  categoryId: Joi.number().integer().positive().required(),
 });
 
 const validateAddProduct = (input) => {
   const { error } = addProductSchema.validate(input, { abortEarly: false });
-  console.dir(error);
   if (error) {
     const msgErr = error.details.reduce((acc, el) => {
       const { message, path } = el;
@@ -27,25 +26,20 @@ const validateAddProduct = (input) => {
   }
 };
 
-export default function AddProductForm({
-  product,
-  allCategory,
-
-  updateProduct,
-  onClose,
-}) {
-  const { createProduct } = useProduct();
+export default function AddProductForm({ product, onClose }) {
+  const { allCategory, createProduct, updateProduct } = useProduct();
   const [input, setInput] = useState({
     name: product?.name ?? '',
     description: product?.description ?? '',
     image: product?.image ?? '',
     stock: product?.stock ?? '',
     price: product?.price ?? '',
-    categoryId: product?.categoryId ?? '',
+    categoryId: product.categoryId ?? '',
   });
   const [error, setError] = useState({});
-  console.log(allCategory);
+
   const handleChangeInput = (e) => {
+    console.log(e.target.name, e.target.value);
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
@@ -58,10 +52,8 @@ export default function AddProductForm({
       }
       setError({});
       if (product) {
-        console.log(product);
         const newProduct = { ...product, ...input };
-        console.log(newProduct);
-        // updateProduct(newProduct);
+        updateProduct(newProduct);
       } else {
         createProduct(input);
       }
@@ -70,7 +62,6 @@ export default function AddProductForm({
       console.log(error);
     }
   };
-
   return (
     <>
       <h1 className="text-3xl font-semibold">Create Product</h1>
@@ -104,12 +95,13 @@ export default function AddProductForm({
               className="py-1 px-2 border w-full border-neutral-400 rounded-xl bg-neutral-100"
               placeholder="Category"
               name="categoryId"
-              value={input.categoryId}
               onChange={handleChangeInput}
+              defaultValue={product.categoryId}
             >
-              <option></option>
               {allCategory.map((category) => (
-                <option key={category.id}>{category.name}</option>
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
               ))}
             </select>
           </div>

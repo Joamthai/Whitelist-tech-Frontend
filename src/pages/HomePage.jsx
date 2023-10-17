@@ -1,7 +1,10 @@
 import ShowSomeProduct from '../components/product/ShowSomeProduct';
 import { ActionButton, ArrowButton } from '../components/ActionButton';
+import useProduct from '../hooks/use-product';
 
 export default function HomePage() {
+  const { allCategory } = useProduct();
+  console.log(allCategory);
   return (
     <div className="mx-16">
       <div className=" flex flex-col justify-center items-center h-[800px] gap-2 z-10">

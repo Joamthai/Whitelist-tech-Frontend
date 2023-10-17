@@ -1,10 +1,23 @@
-import { createContext, useState } from 'react';
+import axios from '../config/axios';
+import { createContext, useEffect, useState } from 'react';
 
 export const ProductContext = createContext();
 
 export default function ProductContextProvider({ children }) {
   const [allProducts, setAllProducts] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('/product')
+      .then((res) => {
+        setAllProducts(res.data.products);
+        setAllCategory(res.data.category);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  }, []);
 
   const createProduct = async (data) => {
     const res = await axios.post('/product', data);
@@ -13,8 +26,14 @@ export default function ProductContextProvider({ children }) {
   };
 
   const updateProduct = async (data) => {
-    const res = await axios.patch('/product', data);
-    console.log(res);
+    try {
+      await axios.patch('/product', data);
+      const res = await axios.get('/product');
+      setAllProducts(res.data.products);
+      setAllCategory(res.data.category);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteProduct = async (productId) => {
@@ -28,13 +47,15 @@ export default function ProductContextProvider({ children }) {
 
   return (
     <ProductContext.Provider
-      value={
-        (createProduct,
+      value={{
+        createProduct,
+        updateProduct,
+        deleteProduct,
         allCategory,
         setAllCategory,
         allProducts,
-        setAllProducts)
-      }
+        setAllProducts,
+      }}
     >
       {children}
     </ProductContext.Provider>

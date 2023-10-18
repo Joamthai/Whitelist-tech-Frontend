@@ -6,6 +6,7 @@ export const ProductContext = createContext();
 export default function ProductContextProvider({ children }) {
   const [allProducts, setAllProducts] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
+  const [product, setProduct] = useState([]);
 
   useEffect(() => {
     axios
@@ -45,12 +46,25 @@ export default function ProductContextProvider({ children }) {
     }
   };
 
+  const getProduct = async (productId) => {
+    console.log(productId);
+    try {
+      await axios.get(`/product/${productId}`);
+      setProduct(allProducts.filter((product) => product.id === productId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ProductContext.Provider
       value={{
         createProduct,
         updateProduct,
         deleteProduct,
+        getProduct,
+        product,
+        setProduct,
         allCategory,
         setAllCategory,
         allProducts,

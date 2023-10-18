@@ -34,12 +34,11 @@ export default function AddProductForm({ product, onClose }) {
     image: product?.image ?? '',
     stock: product?.stock ?? '',
     price: product?.price ?? '',
-    categoryId: product.categoryId ?? '',
+    categoryId: product?.categoryId ?? '',
   });
   const [error, setError] = useState({});
 
   const handleChangeInput = (e) => {
-    console.log(e.target.name, e.target.value);
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
@@ -96,8 +95,9 @@ export default function AddProductForm({ product, onClose }) {
               placeholder="Category"
               name="categoryId"
               onChange={handleChangeInput}
-              defaultValue={product.categoryId}
+              defaultValue={product?.categoryId}
             >
+              <option></option>
               {allCategory.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}

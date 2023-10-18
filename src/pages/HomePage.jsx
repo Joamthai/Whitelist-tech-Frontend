@@ -1,10 +1,8 @@
 import ShowSomeProduct from '../components/product/ShowSomeProduct';
 import { ActionButton, ArrowButton } from '../components/ActionButton';
-import useProduct from '../hooks/use-product';
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
-  const { allCategory } = useProduct();
-  console.log(allCategory);
   return (
     <div className="mx-16">
       <div className=" flex flex-col justify-center items-center h-[800px] gap-2 z-10">
@@ -21,7 +19,9 @@ export default function HomePage() {
           <br /> designed to elevate your everyday experiences
         </p>
         <div className="flex gap-8 m-4">
-          <ActionButton title="Browse products" style="bg-black text-white" />
+          <Link to="/store">
+            <ActionButton title="Browse products" style="bg-black text-white" />
+          </Link>
           <ActionButton
             title="About us"
             style="bg-white text-black border-2 border-black"
@@ -94,7 +94,9 @@ export default function HomePage() {
             create considered solutions fit for the modern lifestyle. Always
             driven by passion, we work to empower others to live the same way.
           </p>
-          <ActionButton title="Browse products" style="bg-black text-white" />
+          <Link to="/store">
+            <ActionButton title="Browse products" style="bg-black text-white" />
+          </Link>
         </div>
       </div>
     </div>

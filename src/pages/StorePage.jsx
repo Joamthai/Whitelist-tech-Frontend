@@ -18,7 +18,6 @@ export default function StorePage() {
         </div>
         <IoFilterSharp className="text-3xl cursor-pointer" />
       </div>
-
       <ItemList />
     </div>
   );

@@ -1,21 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from '../components/Modal';
 import CheckoutForm from '../components/product/CheckoutForm';
 import CheckoutList from '../components/product/CheckoutList';
 import useAuth from '../hooks/use-auth';
 import LoginForm from '../components/auth/LoginForm';
+import useProduct from '../hooks/use-product';
 
 export default function CartPage() {
   const { authUser } = useAuth();
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const { cartItem, getCartItem } = useProduct();
+  useEffect(() => {
+    getCartItem();
+  }, [cartItem]);
+
   return (
     <>
       <div className="flex justify-between gap-16 mx-16 my-20 px-36 min-h-[419px]">
         <div>
           <h1 className="text-4xl mb-8">Cart</h1>
-          <CheckoutList />
-          <CheckoutList />
-          <CheckoutList />
+          {cartItem?.map((item) => {
+            return (
+              <CheckoutList
+                key={item.id}
+                cartItemId={item.id}
+                amount={item.amount}
+                product={item.product}
+              />
+            );
+          })}
         </div>
         <div>
           <h1 className="text-4xl mb-8">Summary</h1>

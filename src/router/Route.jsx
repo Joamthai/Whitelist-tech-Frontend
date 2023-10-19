@@ -16,7 +16,6 @@ const router = createBrowserRouter([
       { path: '', element: <HomePage /> },
       { path: 'store', element: <StorePage /> },
       { path: 'product/:id', element: <ProductPage /> },
-      { path: 'cart', element: <CartPage /> },
     ],
   },
   {
@@ -29,6 +28,7 @@ const router = createBrowserRouter([
     children: [
       { path: 'profile', element: <ProfilePage /> },
       { path: 'order', element: <OrderPage /> },
+      { path: 'cart', element: <CartPage /> },
     ],
   },
 ]);

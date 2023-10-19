@@ -9,12 +9,14 @@ import SignUpForm from '../components/auth/SignUpForm';
 import LoginForm from '../components/auth/LoginForm';
 import useAuth from '../hooks/use-auth';
 import DropDown from '../components/DropDown';
+import useProduct from '../hooks/use-product';
 
 export default function Header() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
 
   const { authUser } = useAuth();
+  const { cartItem } = useProduct();
 
   return (
     <>
@@ -32,7 +34,10 @@ export default function Header() {
             placeholder="Search for..."
             className="border  border-neutral-400 rounded-full px-4 py-1 bg-neutral-100"
           />
-          <Link to="/cart">
+          <Link to="/cart" className="relative">
+            <div className="absolute -top-3 -right-2 flex justify-center items-center bg-black text-white text-xs border border-neutral-500 rounded-full px-1 ">
+              {cartItem?.length || 0}
+            </div>
             <FaCartShopping className="text-2xl text-neutral-400" />
           </Link>
           {authUser ? (

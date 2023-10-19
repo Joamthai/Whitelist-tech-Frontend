@@ -12,7 +12,7 @@ import AddProductForm from './AddProductForm';
 export default function ItemList() {
   const { allProducts } = useProduct();
   const { authUser } = useAuth();
-  const [showProductModal, setShowProductModal] = useState(false);
+  const [showProductModal, setShowProductModal] = useState('');
   return (
     <div className="flex flex-wrap gap-6">
       {!getAccessToken() || authUser.role === 'USER' ? null : (
@@ -28,28 +28,26 @@ export default function ItemList() {
               {!getAccessToken() || authUser.role === 'USER' ? null : (
                 <EditDropDown
                   product={product}
-                  onClick={() => setShowProductModal(true)}
+                  onClick={() => setShowProductModal(product.id)}
                 />
               )}
             </div>
             <Link key={product.id} to={`/product/${product.id}`}>
-              <ItemContainer
-                product={product}
-                isVisible={showProductModal}
-                onClose={() => setShowProductModal(false)}
-              />
+              <ItemContainer product={product} />
             </Link>
           </div>
-          <Modal
-            // key={product.id}
-            isVisible={showProductModal}
-            onClose={() => setShowProductModal(false)}
-          >
-            <AddProductForm
-              product={product}
-              onClose={() => setShowProductModal(false)}
-            />
-          </Modal>
+          {showProductModal === product.id ? (
+            <Modal
+              // key={product.id}
+              isVisible={true}
+              onClose={() => setShowProductModal('')}
+            >
+              <AddProductForm
+                product={product}
+                onClose={() => setShowProductModal(false)}
+              />
+            </Modal>
+          ) : null}
         </>
       ))}
     </div>

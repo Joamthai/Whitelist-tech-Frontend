@@ -4,32 +4,29 @@ import { useState } from 'react';
 import ShowSomeProduct from '../components/product/ShowSomeProduct';
 import useProduct from '../hooks/use-product';
 import { Link, useParams } from 'react-router-dom';
+import useAuth from '../hooks/use-auth';
 
 export default function ProductPage() {
-  const { allProducts } = useProduct();
+  const [count, setCount] = useState(1);
+  const { authUser } = useAuth();
+
+  const { allProducts, addToCart } = useProduct();
   const params = useParams();
   const productId = +params.id;
-
   const product = allProducts.filter((product) => product.id === productId);
 
   const min = 1;
   const max = product[0]?.stock;
-  const [count, setCount] = useState(1);
-
-  function handleIncrement() {
+  const handleIncrement = () => {
     if (count < max) {
       setCount(count + 1);
     }
-  }
-  function handleDecrement() {
+  };
+  const handleDecrement = () => {
     if (count > min) {
       setCount(count - 1);
     }
-  }
-
-  function handleClick(e) {
-    console.log(e);
-  }
+  };
 
   return (
     <div className="mx-16 my-10">
@@ -49,9 +46,7 @@ export default function ProductPage() {
             </div>
             <div className="flex items-center gap-4">
               <CiSquareMinus className="text-4xl" onClick={handleDecrement} />
-              <p className="text-2xl" onChange={handleClick}>
-                {count}
-              </p>
+              <p className="text-2xl">{count}</p>
               <CiSquarePlus className="text-4xl" onClick={handleIncrement} />
             </div>
             <div className="flex flex-col gap-4">
@@ -61,7 +56,16 @@ export default function ProductPage() {
               >
                 Buy now
               </Link>
-              <button className="bg-white text-xl font-medium text-black border-[1.5px] border-black rounded-full hover:shadow-md max-h-fit py-2">
+              <button
+                onClick={() =>
+                  addToCart({
+                    productId: product[0].id,
+                    amount: count,
+                    userId: authUser.id,
+                  })
+                }
+                className="bg-white text-xl font-medium text-black border-[1.5px] border-black rounded-full hover:shadow-md max-h-fit py-2"
+              >
                 Add to cart
               </button>
             </div>

@@ -6,7 +6,7 @@ export default function Modal({ isVisible, onClose, children }) {
   };
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-25  backdrop-blur-md flex justify-center items-center z-50"
+      className="min-h-full min-w-full fixed inset-0 bg-black bg-opacity-25  backdrop-blur-md flex justify-center items-center z-50"
       id="wrapper"
       onClick={handleClose}
     >

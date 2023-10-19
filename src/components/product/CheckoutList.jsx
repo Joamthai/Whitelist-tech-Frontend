@@ -1,30 +1,34 @@
 import { CiSquareMinus, CiSquarePlus, CiTrash } from 'react-icons/ci';
+import useProduct from '../../hooks/use-product';
+import { useEffect } from 'react';
+import { getAccessToken } from '../../utils/local-storage';
 
-export default function CheckoutList() {
+export default function CheckoutList({ product, amount }) {
+  const { deleteFromCart, getCartItem, cartItem } = useProduct();
+  useEffect(() => {
+    if (getAccessToken()) {
+      getCartItem();
+    }
+  }, [cartItem]);
   return (
     <>
       <div className="flex gap-10 border-b-2 p-4">
-        <img
-          className="h-40 bg-black"
-          src="https://framerusercontent.com/images/ucSTRAtxT2D1lfGCCOuKVNTIslk.png"
-          alt=""
-        />
+        <img className="h-40 " src={product?.image} alt="" />
         <div className="flex flex-col  gap-6">
-          <h1 className="text-xl">Lryx Watch</h1>
-          <p className="text-neutral-500 w-96">
-            Elevate your style with the sophisticated Lryx Watch, a perfect
-            Elevate your style with the sophisticated Lryx Watch, a perfect
-            Elevate your style with the sophisticated Lryx Watch, a perfect
-          </p>
+          <h1 className="text-xl">{product?.name}</h1>
+          <p className="text-neutral-500 w-96">{product?.description}</p>
         </div>
         <div className="flex flex-col justify-between items-end text-lg">
-          <p>$349.99 USD</p>
+          <p>${amount * product?.price}USD</p>
           <div className="flex justify-between items-center gap-4 text-2xl">
-            <CiSquareMinus />
-            <p className="text-xl">1</p>
-            <CiSquarePlus />
+            <CiSquareMinus className="cursor-pointer" />
+            <p className="text-xl">{amount}</p>
+            <CiSquarePlus className="cursor-pointer" />
           </div>
-          <CiTrash className="text-2xl" />
+          <CiTrash
+            className="text-2xl cursor-pointer"
+            onClick={() => deleteFromCart(product?.id)}
+          />
         </div>
       </div>
     </>

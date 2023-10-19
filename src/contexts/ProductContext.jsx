@@ -1,13 +1,14 @@
 import axios from '../config/axios';
 import { createContext, useEffect, useState } from 'react';
+import { getAccessToken } from '../utils/local-storage';
 
 export const ProductContext = createContext();
 
 export default function ProductContextProvider({ children }) {
   const [allProducts, setAllProducts] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
-  const [product, setProduct] = useState([]);
-
+  const [isRefresh, setRefresh] = useState(false);
+  const [cartItem, setCartItem] = useState([]);
   useEffect(() => {
     axios
       .get('/product')
@@ -18,6 +19,9 @@ export default function ProductContextProvider({ children }) {
       .catch((error) => {
         throw error;
       });
+    if (getAccessToken()) {
+      getCartItem();
+    }
   }, []);
 
   const createProduct = async (data) => {
@@ -46,11 +50,38 @@ export default function ProductContextProvider({ children }) {
     }
   };
 
-  const getProduct = async (productId) => {
-    console.log(productId);
+  const addToCart = async (data) => {
+    console.log(cartItem);
+    const foundCartItem = cartItem.find(
+      (cart) => cart.productId == data.productId
+    );
+    console.log(foundCartItem);
+    if (foundCartItem) {
+      foundCartItem.amount += +data.amount;
+      await axios.post('/cart', foundCartItem);
+    } else {
+      const res = await axios.post('/cart', data);
+      const newCartItem = res.data.cartItem;
+      setCartItem([newCartItem, ...cartItem]);
+    }
+  };
+
+  const getCartItem = async () => {
     try {
-      await axios.get(`/product/${productId}`);
-      setProduct(allProducts.filter((product) => product.id === productId));
+      const res = await axios.get('/cart');
+      const getCartItem = res.data.cartItem.map((item) => {
+        return { id: item.id, productId: item.productId, amount: item.amount };
+      });
+      setCartItem(getCartItem);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteFromCart = async (productId) => {
+    try {
+      await axios.delete(`/cart/${productId}`);
+      setCartItem(cartItem.filter((product) => product.id !== productId));
     } catch (error) {
       console.log(error);
     }
@@ -62,13 +93,14 @@ export default function ProductContextProvider({ children }) {
         createProduct,
         updateProduct,
         deleteProduct,
-        getProduct,
-        product,
-        setProduct,
         allCategory,
         setAllCategory,
         allProducts,
         setAllProducts,
+        addToCart,
+        getCartItem,
+        cartItem,
+        deleteFromCart,
       }}
     >
       {children}

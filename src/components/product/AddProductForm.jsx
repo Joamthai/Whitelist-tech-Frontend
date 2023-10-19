@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { ActionButton } from '../ActionButton';
 import Input from '../profile/Input';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import InputMessageError from '../auth/InputMessageError';
 import useProduct from '../../hooks/use-product';
 
@@ -27,24 +27,42 @@ const validateAddProduct = (input) => {
 };
 
 export default function AddProductForm({ product, onClose }) {
+  const [file, setFile] = useState(null);
+  const inputEl = useRef(null);
+  console.log(product);
   const { allCategory, createProduct, updateProduct } = useProduct();
   const [input, setInput] = useState({
     name: product?.name ?? '',
     description: product?.description ?? '',
-    image: product?.image ?? '',
     stock: product?.stock ?? '',
     price: product?.price ?? '',
     categoryId: product?.categoryId ?? '',
   });
   const [error, setError] = useState({});
+  const handleUpload = (e) => {
+    console.log(e.target.files);
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
 
   const handleChangeInput = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
+    setInput((input) => {
+      return { ...input, [e.target.name]: e.target.value };
+    });
   };
 
   const handleSubmitForm = async (e) => {
     try {
+      console.log(input);
       e.preventDefault();
+      const formData = new FormData();
+      for (const key of Object.keys(input)) {
+        formData.append(key, input[key]);
+      }
+      formData.append('image', file);
+      console.log(formData.get('image'));
+
       const validationError = validateAddProduct(input);
       if (validationError) {
         return setError(validationError);
@@ -54,7 +72,7 @@ export default function AddProductForm({ product, onClose }) {
         const newProduct = { ...product, ...input };
         updateProduct(newProduct);
       } else {
-        createProduct(input);
+        createProduct(formData);
       }
       onClose();
     } catch (error) {
@@ -106,11 +124,14 @@ export default function AddProductForm({ product, onClose }) {
             </select>
           </div>
           <Input
-            inputTitle="Image URL"
+            type="file"
+            inputTitle="Image"
+            ref={inputEl}
             name="image"
             value={input.image}
-            onChange={handleChangeInput}
+            onChange={handleUpload}
           />
+
           <div className="flex gap-4">
             <Input
               inputTitle="Price"

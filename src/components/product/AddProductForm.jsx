@@ -29,8 +29,8 @@ const validateAddProduct = (input) => {
 export default function AddProductForm({ product, onClose }) {
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
-  console.log(product);
   const { allCategory, createProduct, updateProduct } = useProduct();
+
   const [input, setInput] = useState({
     name: product?.name ?? '',
     description: product?.description ?? '',
@@ -39,6 +39,7 @@ export default function AddProductForm({ product, onClose }) {
     categoryId: product?.categoryId ?? '',
   });
   const [error, setError] = useState({});
+
   const handleUpload = (e) => {
     console.log(e.target.files);
     if (e.target.files[0]) {
@@ -54,7 +55,6 @@ export default function AddProductForm({ product, onClose }) {
 
   const handleSubmitForm = async (e) => {
     try {
-      console.log(input);
       e.preventDefault();
       const formData = new FormData();
       for (const key of Object.keys(input)) {
@@ -110,7 +110,6 @@ export default function AddProductForm({ product, onClose }) {
             <h1>Category :</h1>
             <select
               className="py-1 px-2 border w-full border-neutral-400 rounded-xl bg-neutral-100"
-              placeholder="Category"
               name="categoryId"
               onChange={handleChangeInput}
               defaultValue={product?.categoryId}

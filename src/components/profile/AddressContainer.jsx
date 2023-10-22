@@ -2,12 +2,10 @@ import { BiEdit, BiTrash } from 'react-icons/bi';
 import Modal from '../Modal';
 import AddressForm from './AddressForm';
 import { useState } from 'react';
+import useAuth from '../../hooks/use-auth';
 
-export default function AddressContainer({
-  address,
-  updateAddress,
-  deleteAddress,
-}) {
+export default function AddressContainer({ address }) {
+  const { deleteAddress } = useAuth();
   const [showAddressModal, setShowAddressModal] = useState(false);
   const handleClickDelete = () => deleteAddress(address.id);
   return (
@@ -29,7 +27,6 @@ export default function AddressContainer({
         <AddressForm
           onCloseModal={() => setShowAddressModal(false)}
           address={address}
-          updateAddress={updateAddress}
         />
       </Modal>
     </>

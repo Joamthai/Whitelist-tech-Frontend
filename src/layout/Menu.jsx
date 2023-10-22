@@ -3,7 +3,7 @@ import MenuItem from './MenuItem';
 export default function Menu() {
   const menuLists = [
     { id: 1, to: '/store', text: 'Store' },
-    { id: 2, to: '/', text: 'About' },
+    { id: 2, to: '/about', text: 'About' },
     { id: 3, to: '/', text: 'Support' },
     { id: 4, to: '/', text: 'Contact' },
   ];

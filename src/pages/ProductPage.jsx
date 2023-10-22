@@ -52,6 +52,13 @@ export default function ProductPage() {
             <div className="flex flex-col gap-4">
               <Link
                 to="/cart"
+                onClick={() =>
+                  addToCart({
+                    productId: product[0].id,
+                    amount: count,
+                    userId: authUser.id,
+                  })
+                }
                 className="bg-black text-xl font-medium text-center text-white border border-black rounded-full hover:shadow-md max-h-fit py-2"
               >
                 Buy now

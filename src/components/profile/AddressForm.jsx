@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import Input from './Input';
+import useAuth from '../../hooks/use-auth';
 
-export default function AddressForm({
-  onCloseModal,
-  createAddress,
-  updateAddress,
-  address,
-}) {
+export default function AddressForm({ onCloseModal, address }) {
+  const { createAddress, updateAddress } = useAuth();
   const [input, setInput] = useState({
     title: address?.title ? address?.title : '',
     address: address?.address ? address?.address : '',

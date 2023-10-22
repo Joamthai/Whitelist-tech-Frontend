@@ -5,7 +5,7 @@ import { getAccessToken } from '../../utils/local-storage';
 import AddItemContainer from './AddItemContainer';
 import ItemContainer from './ItemContainer';
 import EditDropDown from './EditDropDown';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import Modal from '../Modal';
 import AddProductForm from './AddProductForm';
 
@@ -19,11 +19,8 @@ export default function ItemList() {
         <AddItemContainer />
       )}
       {allProducts.map((product) => (
-        <>
-          <div
-            key={product.id}
-            className="relative transform transition-all hover:-translate-y-2 duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30 rounded-[56px]"
-          >
+        <Fragment key={product.id}>
+          <div className="relative transform transition-all hover:-translate-y-2 duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30 rounded-[56px]">
             <div className="absolute top-8 right-8 z-50 max-w-fit max-h-fit rounded-full px-4 py-1 text-2xl cursor-pointer ">
               {!getAccessToken() || authUser.role === 'USER' ? null : (
                 <EditDropDown
@@ -32,23 +29,19 @@ export default function ItemList() {
                 />
               )}
             </div>
-            <Link key={product.id} to={`/product/${product.id}`}>
+            <Link to={`/product/${product.id}`}>
               <ItemContainer product={product} />
             </Link>
           </div>
           {showProductModal === product.id ? (
-            <Modal
-              // key={product.id}
-              isVisible={true}
-              onClose={() => setShowProductModal('')}
-            >
+            <Modal isVisible={true} onClose={() => setShowProductModal('')}>
               <AddProductForm
                 product={product}
                 onClose={() => setShowProductModal(false)}
               />
             </Modal>
           ) : null}
-        </>
+        </Fragment>
       ))}
     </div>
   );

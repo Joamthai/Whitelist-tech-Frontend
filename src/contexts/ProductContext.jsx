@@ -7,8 +7,12 @@ export const ProductContext = createContext();
 export default function ProductContextProvider({ children }) {
   const [allProducts, setAllProducts] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
-  const [isRefresh, setRefresh] = useState(false);
+  const [isRefresh, setIsRefresh] = useState(false);
   const [cartItem, setCartItem] = useState([]);
+  const [order, setOrder] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  // const [orderTotalPrice, setOrderTotalPrice] = useState(0);
+
   useEffect(() => {
     axios
       .get('/product')
@@ -21,6 +25,7 @@ export default function ProductContextProvider({ children }) {
       });
     if (getAccessToken()) {
       getCartItem();
+      getOrder();
     }
   }, []);
 
@@ -51,28 +56,71 @@ export default function ProductContextProvider({ children }) {
   };
 
   const addToCart = async (data) => {
-    console.log(cartItem);
     const foundCartItem = cartItem.find(
       (cart) => cart.productId == data.productId
     );
-    console.log(foundCartItem);
+
     if (foundCartItem) {
       foundCartItem.amount += +data.amount;
-      await axios.post('/cart', foundCartItem);
+      await axios.patch('/cart', foundCartItem);
     } else {
       const res = await axios.post('/cart', data);
       const newCartItem = res.data.cartItem;
       setCartItem([newCartItem, ...cartItem]);
+      // setIsRefresh(!isRefresh);
+    }
+  };
+
+  const increaseAmount = async (data) => {
+    try {
+      const foundCartItem = cartItem.find(
+        (cart) =>
+          cart.userId === data.userId && cart.productId === data.product.id
+      );
+      console.log(foundCartItem);
+      if (foundCartItem.product.stock > foundCartItem.amount) {
+        foundCartItem.amount += 1;
+      }
+      if (foundCartItem) {
+        await axios.patch('/cart', foundCartItem);
+      }
+      setIsRefresh(!isRefresh);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const decreaseAmount = async (data) => {
+    try {
+      const foundCartItem = cartItem.find(
+        (cart) => cart.productId == data.product.id
+      );
+      if (foundCartItem.amount > 1) {
+        foundCartItem.amount -= 1;
+      }
+
+      if (foundCartItem) {
+        await axios.patch('/cart', foundCartItem);
+      }
+      setIsRefresh(!isRefresh);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const getCartItem = async () => {
     try {
       const res = await axios.get('/cart');
-      const getCartItem = res.data.cartItem.map((item) => {
-        return { id: item.id, productId: item.productId, amount: item.amount };
-      });
-      setCartItem(getCartItem);
+
+      const newCartItem = res.data.cartItem;
+
+      setCartItem(newCartItem);
+
+      const total = newCartItem.reduce((acc, item) => {
+        return acc + item?.amount * item.product?.price;
+      }, 0);
+
+      setTotalPrice(total);
     } catch (error) {
       console.log(error);
     }
@@ -81,7 +129,129 @@ export default function ProductContextProvider({ children }) {
   const deleteFromCart = async (productId) => {
     try {
       await axios.delete(`/cart/${productId}`);
-      setCartItem(cartItem.filter((product) => product.id !== productId));
+      const newCartItem = cartItem.filter(
+        (product) => product.product.id !== productId
+      );
+      setCartItem(newCartItem);
+      // setIsRefresh(!isRefresh);
+      const total = newCartItem.reduce((acc, item) => {
+        return acc + item?.amount * item.product?.price;
+      }, 0);
+
+      setTotalPrice(total);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const createOrder = async (data) => {
+    try {
+      console.log(data);
+      const res = await axios.post('/profile/order', data);
+      setOrder(res.data.order);
+      getOrder();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const calculateTotalPrice = (order) => {
+    return order[0].orderItems?.reduce(
+      (sum, item) => sum + +item.totalPrice,
+      0
+    );
+  };
+
+  const getOrder = async () => {
+    try {
+      const res = await axios.get('/profile/order');
+
+      const newOrder = res.data.order;
+
+      setOrder(newOrder);
+
+      // const totalPrice = order?.orderItems?.reduce(
+      //   (sum, item) => sum + +item.totalPrice,
+      //   0
+      // );
+
+      // setOrderTotalPrice(totalPrice);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteOrder = async (orderId) => {
+    await axios.delete(`/profile/order/${orderId}`);
+    setOrder(order.filter((order) => order.id !== orderId));
+  };
+
+  const uploadPaySlipOrder = async (data) => {
+    try {
+      console.log(data);
+      const res = await axios.patch('/profile/order/uploadPaySlipOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const confirmOrder = async (data) => {
+    try {
+      const res = await axios.patch('/profile/order/confirmOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const rejectOrder = async (data) => {
+    try {
+      const res = await axios.patch('/profile/order/rejectOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const shippedOrder = async (data) => {
+    try {
+      const res = await axios.patch('/profile/order/shippedOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const receivedOrder = async (data) => {
+    try {
+      const res = await axios.patch('/profile/order/receivedOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
     } catch (error) {
       console.log(error);
     }
@@ -101,6 +271,22 @@ export default function ProductContextProvider({ children }) {
         getCartItem,
         cartItem,
         deleteFromCart,
+        isRefresh,
+        increaseAmount,
+        decreaseAmount,
+        createOrder,
+        order,
+        getOrder,
+        deleteOrder,
+        setTotalPrice,
+        totalPrice,
+        calculateTotalPrice,
+        // orderTotalPrice,
+        uploadPaySlipOrder,
+        confirmOrder,
+        rejectOrder,
+        shippedOrder,
+        receivedOrder,
       }}
     >
       {children}

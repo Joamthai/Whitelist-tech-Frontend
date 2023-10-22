@@ -22,10 +22,12 @@ export default function HomePage() {
           <Link to="/store">
             <ActionButton title="Browse products" style="bg-black text-white" />
           </Link>
-          <ActionButton
-            title="About us"
-            style="bg-white text-black border-2 border-black"
-          />
+          <Link to="/about">
+            <ActionButton
+              title="About us"
+              style="bg-white text-black border-2 border-black"
+            />
+          </Link>
         </div>
         <img
           className="absolute left-0 bottom-7  h-auto max-w-sm rounded-lg shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30"

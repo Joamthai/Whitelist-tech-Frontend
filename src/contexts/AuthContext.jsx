@@ -11,10 +11,12 @@ export const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
   const [authUser, setAuthUser] = useState(getAccessToken());
+  const [allAddress, setAllAddress] = useState([]);
 
   useEffect(() => {
     if (getAccessToken()) {
       axios.get('/auth/me').then((res) => setAuthUser(res.data.user));
+      getAllAddress();
     }
   }, []);
 
@@ -39,8 +41,57 @@ export default function AuthContextProvider({ children }) {
     setAuthUser(null);
   };
 
+  const createAddress = async (data) => {
+    const res = await axios.post('/profile/address', data);
+    const newAddress = res.data.address;
+    setAllAddress([newAddress, ...allAddress]);
+  };
+
+  const updateAddress = async (data) => {
+    delete data.createdAt;
+    delete data.updatedAt;
+    delete data.user;
+    const res = await axios.patch('/profile/address', data);
+    const indexAddress = allAddress.findIndex((el) => el.id === data.id);
+    const newAllAddress = [...allAddress];
+    const updatedAddress = res.data.address;
+    newAllAddress.splice(indexAddress, 1, updatedAddress);
+    setAllAddress(newAllAddress);
+  };
+
+  const deleteAddress = async (addressId) => {
+    try {
+      await axios.delete(`/profile/address/${addressId}`);
+      setAllAddress(allAddress.filter((address) => address.id !== addressId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllAddress = async () => {
+    try {
+      const res = await axios.get('/profile/address');
+      setAllAddress(res.data.addresses);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ authUser, signUp, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        authUser,
+        signUp,
+        login,
+        logout,
+        allAddress,
+        setAllAddress,
+        createAddress,
+        updateAddress,
+        deleteAddress,
+        getAllAddress,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

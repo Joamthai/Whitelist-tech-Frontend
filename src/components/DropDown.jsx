@@ -10,7 +10,7 @@ export default function DropDown() {
   return (
     <div className="relative z-50">
       <span
-        className="text-xl  text-neutral-500 cursor-pointer hover:underline"
+        className="text-xl  text-neutral-500 cursor-pointer hover:text-black hover:md:drop-shadow-md"
         onClick={() => setIsOpen(!isOpen)}
       >
         {`Hi, ${authUser.firstName}`}
@@ -36,7 +36,7 @@ export default function DropDown() {
           <Link>
             <div
               className=" hover:bg-neutral-300 rounded-md px-2"
-              onClick={logout}
+              onClick={() => logout()}
             >
               Log out
             </div>

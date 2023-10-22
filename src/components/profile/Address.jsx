@@ -4,13 +4,10 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import Modal from '../Modal';
 import AddressForm from './AddressForm';
 import AddressContainer from './AddressContainer';
+import useAuth from '../../hooks/use-auth';
 
-export default function Address({
-  allAddress,
-  createAddress,
-  updateAddress,
-  deleteAddress,
-}) {
+export default function Address() {
+  const { allAddress } = useAuth();
   const [showAddressModal, setShowAddressModal] = useState(false);
   return (
     <>
@@ -23,12 +20,7 @@ export default function Address({
           <h1 className="text-xl cursor-pointer">New address</h1>
         </div>
         {allAddress.map((address) => (
-          <AddressContainer
-            key={address.id}
-            address={address}
-            updateAddress={updateAddress}
-            deleteAddress={deleteAddress}
-          />
+          <AddressContainer key={address.id} address={address} />
         ))}
       </div>
       <Modal
@@ -36,7 +28,6 @@ export default function Address({
         onClose={() => setShowAddressModal(false)}
       >
         <AddressForm
-          createAddress={createAddress}
           onCloseModal={() => {
             setShowAddressModal(false);
           }}

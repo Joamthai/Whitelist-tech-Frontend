@@ -1,4 +1,3 @@
-import { BiEdit } from 'react-icons/bi';
 import useAuth from '../../hooks/use-auth';
 
 export default function UserInfo({
@@ -17,7 +16,6 @@ export default function UserInfo({
         className="flex justify-between items-center border border-neutral-400 rounded-xl px-4 py-1 bg-neutral-100 w-full"
       >
         {authUser[name] || '-'}
-        <BiEdit className="cursor-pointer text-neutral-500 text-lg" />
       </p>
     </div>
   );

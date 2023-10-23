@@ -6,12 +6,10 @@ export default function OrderList({ order }) {
   const { confirmOrder, rejectOrder, shippedOrder, receivedOrder } =
     useProduct();
   const { authUser } = useAuth();
-  console.log(order);
 
   return (
     <div className="flex justify-start items-center gap-4 ">
       <Link
-        // to={order.paySlip ? `/order` : `/order/${order.id}`}
         to={`/order/${order.id}`}
         className="flex w-96 gap-4 justify-between p-2 border border-neutral-500 rounded-lg bg-neutral-100 hover:shadow-lg hover:shadow-black/30 transition-shadow duration-300 ease-in-out"
       >
@@ -22,7 +20,7 @@ export default function OrderList({ order }) {
           </div>
           <h1>{`${order.user?.firstName} ${order.user?.lastName}`}</h1>
           <h1>
-            address:{' '}
+            address:
             {`${order.address?.title} ${order.address?.address} ${order.address?.subDistrict} ${order.address?.district} ${order.address?.province} ${order.address?.country} ${order.address?.postalCode}`}
           </h1>
         </div>
@@ -56,19 +54,15 @@ export default function OrderList({ order }) {
             ''
           )}
         </div>
-      ) : (
-        // {order.status !=='DELIVERED'? (<button
-        //   onClick={() => receivedOrder(order)}
-        //   className="bg-black text-white text-xl p-1.5 rounded-xl"
-        // >
-        //   Received
-        // </button>):''}
+      ) : order.status !== 'DELIVERED' ? (
         <button
           onClick={() => receivedOrder(order)}
-          className="bg-black text-white text-xl p-1.5 rounded-xl hover:shadow-lg hover:shadow-black/30 transition-shadow duration-300 ease-in-out"
+          className="bg-black text-white text-xl p-1.5 rounded-xl"
         >
           Received
         </button>
+      ) : (
+        ''
       )}
     </div>
   );

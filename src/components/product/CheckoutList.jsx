@@ -2,23 +2,16 @@ import { CiSquareMinus, CiSquarePlus, CiTrash } from 'react-icons/ci';
 import useProduct from '../../hooks/use-product';
 import { useEffect } from 'react';
 import { getAccessToken } from '../../utils/local-storage';
-import useAuth from '../../hooks/use-auth';
 
 export default function CheckoutList({ product, amount }) {
-  const { authUser } = useAuth();
-  const {
-    deleteFromCart,
-    getCartItem,
-    isRefresh,
-    increaseAmount,
-    decreaseAmount,
-  } = useProduct();
+  const { deleteFromCart, getCartItem, increaseAmount, decreaseAmount } =
+    useProduct();
   useEffect(() => {
     if (getAccessToken()) {
       getCartItem();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRefresh]);
+  }, []);
   const handleAmount = product?.stock > amount ? amount : product?.stock;
   return (
     <>
@@ -34,9 +27,8 @@ export default function CheckoutList({ product, amount }) {
             <CiSquareMinus
               onClick={() =>
                 decreaseAmount({
-                  amount: amount,
-                  product: product,
-                  userId: authUser.id,
+                  amount,
+                  product,
                 })
               }
               className="cursor-pointer"
@@ -45,9 +37,8 @@ export default function CheckoutList({ product, amount }) {
             <CiSquarePlus
               onClick={() =>
                 increaseAmount({
-                  amount: amount,
-                  product: product,
-                  userId: authUser.id,
+                  amount,
+                  product,
                 })
               }
               className="cursor-pointer"

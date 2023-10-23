@@ -11,7 +11,6 @@ export default function ProfileForm() {
         </div>
         <UserInfo name="email" inputTitle="Email" />
         <UserInfo name="mobile" inputTitle="Mobile" />
-        <UserInfo inputTitle="Password" />
       </div>
     </form>
   );

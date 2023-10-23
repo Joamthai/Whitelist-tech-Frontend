@@ -1,5 +1,5 @@
 import { CiSquareMinus, CiSquarePlus } from 'react-icons/ci';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ShowSomeProduct from '../components/product/ShowSomeProduct';
 import useProduct from '../hooks/use-product';
@@ -27,6 +27,9 @@ export default function ProductPage() {
       setCount(count - 1);
     }
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="mx-16 my-10">

@@ -10,6 +10,7 @@ import LoginForm from '../components/auth/LoginForm';
 import useAuth from '../hooks/use-auth';
 import DropDown from '../components/DropDown';
 import useProduct from '../hooks/use-product';
+import { getAccessToken } from '../utils/local-storage';
 
 export default function Header() {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -36,7 +37,7 @@ export default function Header() {
           />
           <Link to="/cart" className="relative">
             <div className="absolute -top-3 -right-2 flex justify-center items-center bg-black text-white text-xs border border-neutral-500 rounded-full px-1 ">
-              {cartItem?.length || 0}
+              {getAccessToken() ? cartItem.length : 0}
             </div>
             <FaCartShopping className="text-2xl text-neutral-400" />
           </Link>

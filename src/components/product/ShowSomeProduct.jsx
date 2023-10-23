@@ -5,6 +5,8 @@ import useProduct from '../../hooks/use-product';
 
 export default function ShowSomeProduct({ title }) {
   const { allProducts } = useProduct();
+  const someProduct = allProducts.slice(0, 4);
+
   return (
     <div>
       <div className="flex justify-between items-center px-40 mb-7">
@@ -14,7 +16,7 @@ export default function ShowSomeProduct({ title }) {
         </Link>
       </div>
       <div className="flex justify-center gap-10">
-        {allProducts.map((product) => (
+        {someProduct.map((product) => (
           <ItemContainer key={product.id} product={product} />
         ))}
       </div>

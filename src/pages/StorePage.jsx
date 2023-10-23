@@ -2,9 +2,17 @@ import { IoFilterSharp } from 'react-icons/io5';
 import { CategoryButton } from '../components/ActionButton';
 import ItemList from '../components/product/ItemList';
 import useProduct from '../hooks/use-product';
+import { useEffect } from 'react';
+import axios from '../config/axios';
 
 export default function StorePage() {
-  const { allCategory } = useProduct();
+  const { allCategory, setAllProducts } = useProduct();
+  useEffect(() => {
+    axios.get('/product').then((res) => {
+      setAllProducts(res.data.products);
+    });
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="mx-16 my-10 px-40">

@@ -3,6 +3,7 @@ import Input from './Input';
 import { useState } from 'react';
 import useAuth from '../../hooks/use-auth';
 import InputMessageError from './InputMessageError';
+import useProduct from '../../hooks/use-product';
 
 const loginSchema = Joi.object({
   email: Joi.string()
@@ -27,13 +28,14 @@ const validateLogin = (input) => {
 };
 
 export default function LoginForm({ onCloseModal }) {
+  const { getCartItem, getOrder } = useProduct();
   const [input, setInput] = useState({
     email: '',
     password: '',
   });
 
   const [error, setError] = useState({});
-  const { login } = useAuth();
+  const { login, getAllAddress } = useAuth();
 
   const handleChangeInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -47,6 +49,9 @@ export default function LoginForm({ onCloseModal }) {
     login(input)
       .then(() => {
         onCloseModal();
+        getCartItem();
+        getOrder();
+        getAllAddress();
       })
       .catch((error) => {
         throw error;

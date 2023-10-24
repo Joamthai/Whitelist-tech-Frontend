@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { ActionButton } from '../ActionButton';
 import Input from '../profile/Input';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import InputMessageError from '../auth/InputMessageError';
 import useProduct from '../../hooks/use-product';
 
@@ -21,14 +21,12 @@ const validateAddProduct = (input) => {
       const { message, path } = el;
       acc[path[0]] = message;
     }, {});
-    console.log(msgErr);
     return msgErr;
   }
 };
 
 export default function AddProductForm({ product, onClose }) {
   const [file, setFile] = useState(null);
-  const inputEl = useRef(null);
   const { allCategory, createProduct, updateProduct } = useProduct();
 
   const [input, setInput] = useState({
@@ -41,7 +39,6 @@ export default function AddProductForm({ product, onClose }) {
   const [error, setError] = useState({});
 
   const handleUpload = (e) => {
-    console.log(e.target.files);
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
     }
@@ -56,21 +53,25 @@ export default function AddProductForm({ product, onClose }) {
   const handleSubmitForm = async (e) => {
     try {
       e.preventDefault();
+
       const formData = new FormData();
+
+      const validationError = validateAddProduct(input);
+
+      if (validationError) {
+        return setError(validationError);
+      }
+
+      setError({});
+
       for (const key of Object.keys(input)) {
         formData.append(key, input[key]);
       }
       formData.append('image', file);
-      console.log(formData.get('image'));
 
-      const validationError = validateAddProduct(input);
-      if (validationError) {
-        return setError(validationError);
-      }
-      setError({});
       if (product) {
-        const newProduct = { ...product, ...input };
-        updateProduct(newProduct);
+        formData.append('id', product.id);
+        updateProduct(formData);
       } else {
         createProduct(formData);
       }
@@ -125,7 +126,6 @@ export default function AddProductForm({ product, onClose }) {
           <Input
             type="file"
             inputTitle="Image"
-            ref={inputEl}
             name="image"
             value={input.image}
             onChange={handleUpload}

@@ -21,60 +21,60 @@ export default function AboutPage() {
           <div className="flex flex-col justify-end gap-8">
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697736285/project/iWatch_SE_3_wgtund.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163287/project/iWatch_SE_3_jc193t.png"
               alt="iWatch_SE_3"
             />
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697736285/project/Speaker_vswiis.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163287/project/Speaker_dy4y8b.png"
               alt="Speaker"
             />
           </div>
           <div className="flex flex-col justify-start gap-8">
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697208492/project/Headphone_21-Bass_defj8d.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163286/project/Headphone_21-Bass_pwrjor.png"
               alt="Headphone_21-Bass"
             />
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697736285/project/iPhone_Case_knud6z.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163286/project/iPhone_Case_cnc1xs.png"
               alt="iPhone_Case"
             />
           </div>
           <div className="flex flex-col justify-end gap-8">
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697736285/project/MX_Master_3_mhqwu9.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163287/project/MX_Master_3_npwc37.png"
               alt="MX_Master_3"
             />
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697131914/project/Lryx-Watch_hkkuqt.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163286/project/Lryx-Watch_gyoupi.png"
               alt="Lryx-Watch"
             />
           </div>
           <div className="flex flex-col justify-start gap-8">
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697134227/project/Phone_Charger_Port_ojsq3a.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163287/project/Phone_Charger_Port_juxqa1.png"
               alt="Phone_Charger_Port"
             />
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697134228/project/Premium_Earbuds_kuv6d3.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163286/project/Premium_Earbuds_zfhefo.png"
               alt="Premium_Earbuds"
             />
           </div>
           <div className="flex flex-col justify-end gap-8">
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697134227/project/VR_Headset_mpnhpj.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163287/project/VR_Headset_lwq3uf.png"
               alt="VR_Headset"
             />
             <img
               className="h-60"
-              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697736285/project/Purifier_mqrlcg.png"
+              src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698163286/project/Purifier_qmad5u.png"
               alt="Purifier"
             />
           </div>

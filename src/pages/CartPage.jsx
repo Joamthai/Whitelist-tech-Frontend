@@ -19,8 +19,10 @@ export default function CartPage() {
   };
 
   const submitCreateOrder = () => {
-    createOrder(input);
-    navigate('/order');
+    if (input) {
+      createOrder(input);
+      navigate('/order');
+    }
   };
   return (
     <>

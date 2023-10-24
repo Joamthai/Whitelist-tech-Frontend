@@ -4,12 +4,13 @@ import useProduct from '../../hooks/use-product';
 
 export default function EditDropDown({ product, onClick }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { deleteProduct } = useProduct();
+  const { deleteProduct, getProductBack } = useProduct();
 
   const openAndClose = () => {
     onClick();
     setIsOpen(false);
   };
+  // console.log(product);
 
   return (
     <>
@@ -23,12 +24,21 @@ export default function EditDropDown({ product, onClick }) {
             >
               Edit
             </div>
-            <div
-              className=" hover:bg-neutral-300 rounded-md px-2"
-              onClick={() => deleteProduct(product.id)}
-            >
-              Delete
-            </div>
+            {product.deleted === false ? (
+              <div
+                className=" hover:bg-neutral-300 rounded-md px-2"
+                onClick={() => deleteProduct(product.id)}
+              >
+                Delete
+              </div>
+            ) : (
+              <div
+                className=" hover:bg-neutral-300 rounded-md px-2"
+                onClick={() => getProductBack(product.id)}
+              >
+                Restore
+              </div>
+            )}
           </div>
         )}
       </div>

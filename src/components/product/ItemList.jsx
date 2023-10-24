@@ -10,7 +10,7 @@ import Modal from '../Modal';
 import AddProductForm from './AddProductForm';
 
 export default function ItemList() {
-  const { allProducts } = useProduct();
+  const { selectedCategory } = useProduct();
   const { authUser } = useAuth();
   const [showProductModal, setShowProductModal] = useState('');
   return (
@@ -18,7 +18,7 @@ export default function ItemList() {
       {!getAccessToken() || authUser.role === 'USER' ? null : (
         <AddItemContainer />
       )}
-      {allProducts.map((product) => (
+      {selectedCategory.map((product) => (
         <Fragment key={product.id}>
           <div className="relative transform transition-all hover:-translate-y-2 duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30 rounded-[56px]">
             <div className="absolute top-8 right-8 z-50 max-w-fit max-h-fit rounded-full px-4 py-1 text-2xl cursor-pointer ">

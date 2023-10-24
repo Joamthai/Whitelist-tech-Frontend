@@ -1,46 +1,68 @@
 import axios from '../config/axios';
 import { createContext, useEffect, useState } from 'react';
 import { getAccessToken } from '../utils/local-storage';
+import useAuth from '../hooks/use-auth';
 
 export const ProductContext = createContext();
 
 export default function ProductContextProvider({ children }) {
   const [allProducts, setAllProducts] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
-  // const [isRefresh, setIsRefresh] = useState(false);
   const [cartItem, setCartItem] = useState([]);
   const [order, setOrder] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  // const [orderTotalPrice, setOrderTotalPrice] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const { authUser } = useAuth();
 
   useEffect(() => {
-    axios
-      .get('/product')
-      .then((res) => {
-        setAllProducts(res.data.products);
-        setAllCategory(res.data.category);
-      })
-      .catch((error) => {
-        throw error;
-      });
+    getProducts();
     if (getAccessToken()) {
       // getCartItem();
       getOrder();
     }
-  }, []);
+  }, [authUser]);
+
+  const getProducts = async () => {
+    axios
+      .get('/product')
+      .then((res) => {
+        if (authUser.role === 'ADMIN') {
+          setSelectedCategory(res.data.products);
+          setAllProducts(res.data.products);
+        } else {
+          const products = res.data.products.filter(
+            (product) => product.deleted === false
+          );
+          setAllProducts(products);
+          setSelectedCategory(products);
+        }
+        setAllCategory(res.data.category);
+        console.log(res.data.category);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
 
   const createProduct = async (data) => {
     const res = await axios.post('/product', data);
     const newProduct = res.data.product;
+    console.log(newProduct);
     setAllProducts([newProduct, ...allProducts]);
   };
 
   const updateProduct = async (data) => {
     try {
-      await axios.patch('/product', data);
-      const res = await axios.get('/product');
-      setAllProducts(res.data.products);
-      setAllCategory(res.data.category);
+      const res = await axios.patch('/product', data);
+      // const res = await axios.get('/product');
+      const newProduct = [...selectedCategory];
+      const foundIdx = newProduct.findIndex(
+        (item) => item.id === res.data.product.id
+      );
+      newProduct.splice(foundIdx, 1, res.data.product);
+      setSelectedCategory(newProduct);
+      // setAllProducts(res.data.products);
+      // setAllCategory(res.data?.category?.name);
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +71,22 @@ export default function ProductContextProvider({ children }) {
   const deleteProduct = async (productId) => {
     try {
       await axios.delete(`/product/${productId}`);
-      setAllProducts(allProducts.filter((product) => product.id !== productId));
+      setSelectedCategory(
+        allProducts.filter((product) => product.deleted === false)
+      );
+      getProducts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getProductBack = async (productId) => {
+    try {
+      await axios.patch(`/product/${productId}`);
+      setSelectedCategory(
+        allProducts.filter((product) => product.deleted === false)
+      );
+      getProducts();
     } catch (error) {
       console.log(error);
     }
@@ -107,6 +144,16 @@ export default function ProductContextProvider({ children }) {
     }
   };
 
+  const filterCategory = (category) => {
+    if (category === 'all') {
+      return setSelectedCategory(allProducts);
+    } else {
+      setSelectedCategory(
+        allProducts.filter((products) => products.category.name === category)
+      );
+    }
+  };
+
   const getCartItem = async () => {
     try {
       const res = await axios.get('/cart');
@@ -147,24 +194,16 @@ export default function ProductContextProvider({ children }) {
       await axios.post('/profile/order', data);
       // setOrder(res.data.order);
       getOrder();
+      getCartItem();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const calculateTotalPrice = (order) => {
-    return order[0].orderItems?.reduce(
-      (sum, item) => sum + +item.totalPrice,
-      0
-    );
-  };
-
   const getOrder = async () => {
     try {
       const res = await axios.get('/profile/order');
-
       const newOrder = res.data.order;
-
       setOrder(newOrder);
 
       // const totalPrice = order?.orderItems?.reduce(
@@ -185,13 +224,13 @@ export default function ProductContextProvider({ children }) {
 
   const uploadPaySlipOrder = async (data) => {
     try {
-      await axios.patch('/profile/order/uploadPaySlipOrder', data);
-      // const newOrder = [...order];
-      // const foundIdx = newOrder.findIndex(
-      //   (item) => item.id === res.data.order.id
-      // );
-      // newOrder.splice(foundIdx, 1, res.data.order);
-      // setOrder(newOrder);
+      const res = await axios.patch('/profile/order/uploadPaySlipOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
       getOrder();
     } catch (error) {
       console.log(error);
@@ -200,13 +239,13 @@ export default function ProductContextProvider({ children }) {
 
   const confirmOrder = async (data) => {
     try {
-      await axios.patch('/profile/order/confirmOrder', data);
-      // const newOrder = [...order];
-      // const foundIdx = newOrder.findIndex(
-      //   (item) => item.id === res.data.order.id
-      // );
-      // newOrder.splice(foundIdx, 1, res.data.order);
-      // setOrder(newOrder);
+      const res = await axios.patch('/profile/order/confirmOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
       getOrder();
     } catch (error) {
       console.log(error);
@@ -215,14 +254,14 @@ export default function ProductContextProvider({ children }) {
 
   const rejectOrder = async (data) => {
     try {
-      await axios.patch('/profile/order/rejectOrder', data);
-      // const newOrder = [...order];
-      // const foundIdx = newOrder.findIndex(
-      //   (item) => item.id === res.data.order.id
-      // );
-      // newOrder.splice(foundIdx, 1, res.data.order);
-      // setOrder(newOrder);
-      getOrder();
+      const res = await axios.patch('/profile/order/rejectOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
+      // getOrder();
     } catch (error) {
       console.log(error);
     }
@@ -230,14 +269,14 @@ export default function ProductContextProvider({ children }) {
 
   const shippedOrder = async (data) => {
     try {
-      await axios.patch('/profile/order/shippedOrder', data);
-      // const newOrder = [...order];
-      // const foundIdx = newOrder.findIndex(
-      //   (item) => item.id === res.data.order.id
-      // );
-      // newOrder.splice(foundIdx, 1, res.data.order);
-      // setOrder(newOrder);
-      getOrder();
+      const res = await axios.patch('/profile/order/shippedOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
+      // getOrder();
     } catch (error) {
       console.log(error);
     }
@@ -245,14 +284,14 @@ export default function ProductContextProvider({ children }) {
 
   const receivedOrder = async (data) => {
     try {
-      await axios.patch('/profile/order/receivedOrder', data);
-      // const newOrder = [...order];
-      // const foundIdx = newOrder.findIndex(
-      //   (item) => item.id === res.data.order.id
-      // );
-      // newOrder.splice(foundIdx, 1, res.data.order);
-      // setOrder(newOrder);
-      getOrder();
+      const res = await axios.patch('/profile/order/receivedOrder', data);
+      const newOrder = [...order];
+      const foundIdx = newOrder.findIndex(
+        (item) => item.id === res.data.order.id
+      );
+      newOrder.splice(foundIdx, 1, res.data.order);
+      setOrder(newOrder);
+      // getOrder();
     } catch (error) {
       console.log(error);
     }
@@ -281,13 +320,14 @@ export default function ProductContextProvider({ children }) {
         deleteOrder,
         setTotalPrice,
         totalPrice,
-        calculateTotalPrice,
-        // orderTotalPrice,
         uploadPaySlipOrder,
         confirmOrder,
         rejectOrder,
         shippedOrder,
         receivedOrder,
+        filterCategory,
+        selectedCategory,
+        getProductBack,
       }}
     >
       {children}

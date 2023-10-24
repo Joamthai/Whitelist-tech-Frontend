@@ -26,10 +26,8 @@ export default function CheckoutPage() {
       const formData = new FormData();
       formData.append('paySlip', file);
       formData.append('id', orderList[0].id);
-      console.log(formData);
       uploadPaySlipOrder(formData);
       navigate('/order');
-      console.log(formData.get('paySlip'));
     } catch (error) {
       console.log(error);
     }
@@ -38,6 +36,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     getOrder();
   }, []);
+
   return (
     <div className="flex justify-center items-center gap-40 my-20">
       <form

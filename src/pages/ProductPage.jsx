@@ -34,7 +34,12 @@ export default function ProductPage() {
   return (
     <div className="mx-16 my-10">
       <div className="my-10">
-        <div className="mx-24 mb-8">{`Store / ${product[0]?.category?.name} / ${product[0]?.name}`}</div>
+        {/* <div className="mx-24 mb-8">{`Store / ${product[0]?.category?.name} / ${product[0]?.name}`}</div> */}
+        <div className="flex mx-24 mb-8">
+          <Link to="/store">Store</Link> /
+          <Link>{product[0]?.category?.name}</Link> /
+          <Link>{product[0]?.name}</Link>
+        </div>
         <div className="flex justify-center gap-40 ">
           <img
             className="h-[450px]"
@@ -42,7 +47,7 @@ export default function ProductPage() {
             alt={product[0]?.name}
           />
 
-          <div className="flex flex-col justify-start gap-10 w-96">
+          <div className="flex flex-col justify-start gap-10 w-[450px]">
             <div className="flex flex-col gap-8">
               <h1 className="text-5xl ">{product[0]?.name}</h1>
               <p className="text-xl">{product[0]?.description}</p>
@@ -52,6 +57,13 @@ export default function ProductPage() {
               <p className="text-2xl">{count}</p>
               <CiSquarePlus className="text-4xl" onClick={handleIncrement} />
             </div>
+            <p
+              className={`text-xl ${
+                product[0]?.stock === count ? 'text-red-500' : 'text-black'
+              }`}
+            >
+              in stock: {product[0]?.stock}
+            </p>
             <div className="flex flex-col gap-4">
               <Link
                 to="/cart"

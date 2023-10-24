@@ -54,7 +54,7 @@ export default function OrderList({ order }) {
             ''
           )}
         </div>
-      ) : order.status !== 'DELIVERED' ? (
+      ) : order.status === 'SHIPPED' ? (
         <button
           onClick={() => receivedOrder(order)}
           className="bg-black text-white text-xl p-1.5 rounded-xl"

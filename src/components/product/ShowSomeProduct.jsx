@@ -17,7 +17,9 @@ export default function ShowSomeProduct({ title }) {
       </div>
       <div className="flex justify-center gap-10">
         {someProduct.map((product) => (
-          <ItemContainer key={product.id} product={product} />
+          <Link to={`/product/${product.id}`} key={product.id}>
+            <ItemContainer product={product} />
+          </Link>
         ))}
       </div>
     </div>

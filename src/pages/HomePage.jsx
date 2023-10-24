@@ -1,13 +1,15 @@
 import ShowSomeProduct from '../components/product/ShowSomeProduct';
 import { ActionButton, ArrowButton } from '../components/ActionButton';
 import { Link } from 'react-router-dom';
+import useProduct from '../hooks/use-product';
 
 export default function HomePage() {
+  const { filterCategory } = useProduct();
   return (
     <div className="mx-16">
       <div className=" flex flex-col justify-center items-center h-[800px] gap-2 z-10">
         <img
-          src="https://res.cloudinary.com/der7sk8rq/image/upload/v1697127392/gwI54viPFVYGDdbTWc3aT9erBA_faxp3d.webp"
+          src="https://res.cloudinary.com/der7sk8rq/image/upload/v1698149005/project/gwI54viPFVYGDdbTWc3aT9erBA_bvggr9.webp"
           className="absolute top-24 right-0 h-auto max-w-sm rounded-lg shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30"
           alt=""
         />
@@ -46,7 +48,9 @@ export default function HomePage() {
                 Technology
               </p>
             </div>
-            <ArrowButton />
+            <Link to="/store">
+              <ArrowButton onClick={() => filterCategory('Technology')} />
+            </Link>
           </div>
           <div className="w-[465px] h-[390px] p-16 border rounded-[56px] flex flex-col items-start gap-9 bg-neutral-100">
             <div>
@@ -55,7 +59,9 @@ export default function HomePage() {
                 Equip Yourself with Top-Notch Gear for Every Adventure
               </p>
             </div>
-            <ArrowButton />
+            <Link to="/store">
+              <ArrowButton onClick={() => filterCategory('Gear')} />
+            </Link>
           </div>
         </div>
         <div className="flex gap-10">
@@ -67,7 +73,9 @@ export default function HomePage() {
                 Technology
               </p>
             </div>
-            <ArrowButton />
+            <Link to="/store">
+              <ArrowButton onClick={() => filterCategory('Technology')} />
+            </Link>
           </div>
           <div className="w-[815px] h-[390px] p-16 border rounded-[56px] flex flex-col items-start gap-9 bg-neutral-100">
             <div>
@@ -77,7 +85,9 @@ export default function HomePage() {
                 Accessories
               </p>
             </div>
-            <ArrowButton />
+            <Link to="/store">
+              <ArrowButton onClick={() => filterCategory('Accessory')} />
+            </Link>
           </div>
         </div>
       </div>

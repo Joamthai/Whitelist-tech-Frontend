@@ -4,6 +4,16 @@ export default function ItemContainer({ product }) {
       <div className="absolute top-8 left-8 max-w-fit max-h-fit bg-white rounded-full px-4 py-1 text-lg shadow-xl">
         {product?.category?.name}
       </div>
+      {product.stock === 0 ? (
+        <div className="absolute top-32 left-0 min-w-full bg-white py-2 text-3xl font-semibold opacity-80 text-center shadow-xl">
+          <p>Sold out</p>
+        </div>
+      ) : null}
+      {product.deleted === true ? (
+        <div className="absolute top-32 left-0 min-w-full bg-white py-2 text-3xl font-semibold opacity-80 text-center shadow-xl">
+          <p>Temporarily suspended</p>
+        </div>
+      ) : null}
 
       <img src={product?.image} alt={product?.name} />
       <div className="flex flex-col flex-1 justify-between px-1">

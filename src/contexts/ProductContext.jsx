@@ -23,46 +23,42 @@ export default function ProductContextProvider({ children }) {
   }, [authUser]);
 
   const getProducts = async () => {
-    axios
-      .get('/product')
-      .then((res) => {
-        if (authUser.role === 'ADMIN') {
-          setSelectedCategory(res.data.products);
-          setAllProducts(res.data.products);
-        } else {
-          const products = res.data.products.filter(
-            (product) => product.deleted === false
-          );
-          setAllProducts(products);
-          setSelectedCategory(products);
-        }
-        setAllCategory(res.data.category);
-        console.log(res.data.category);
-      })
-      .catch((error) => {
-        throw error;
-      });
+    try {
+      const res = await axios.get('/product');
+
+      if (authUser.role === 'ADMIN') {
+        setSelectedCategory(res.data.products);
+        setAllProducts(res.data.products);
+      } else {
+        const products = res.data.products.filter(
+          (product) => product.deleted === false
+        );
+        setAllProducts(products);
+        setSelectedCategory(products);
+      }
+      setAllCategory(res.data.category);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const createProduct = async (data) => {
     const res = await axios.post('/product', data);
     const newProduct = res.data.product;
-    console.log(newProduct);
-    setAllProducts([newProduct, ...allProducts]);
+    setAllProducts([...allProducts, newProduct]);
+    setAllProducts([...allProducts, newProduct]);
+    getProducts();
   };
 
   const updateProduct = async (data) => {
     try {
       const res = await axios.patch('/product', data);
-      // const res = await axios.get('/product');
       const newProduct = [...selectedCategory];
       const foundIdx = newProduct.findIndex(
         (item) => item.id === res.data.product.id
       );
       newProduct.splice(foundIdx, 1, res.data.product);
       setSelectedCategory(newProduct);
-      // setAllProducts(res.data.products);
-      // setAllCategory(res.data?.category?.name);
     } catch (error) {
       console.log(error);
     }
@@ -301,6 +297,7 @@ export default function ProductContextProvider({ children }) {
     <ProductContext.Provider
       value={{
         createProduct,
+        getProducts,
         updateProduct,
         deleteProduct,
         allCategory,

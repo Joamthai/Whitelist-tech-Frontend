@@ -1,10 +1,11 @@
 import ShowSomeProduct from '../components/product/ShowSomeProduct';
 import { ActionButton, ArrowButton } from '../components/ActionButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useProduct from '../hooks/use-product';
 
 export default function HomePage() {
   const { filterCategory } = useProduct();
+  const navigate = useNavigate();
   return (
     <div className="mx-16">
       <div className=" flex flex-col justify-center items-center h-[800px] gap-2 z-10">
@@ -48,9 +49,13 @@ export default function HomePage() {
                 Technology
               </p>
             </div>
-            <Link to="/store">
-              <ArrowButton onClick={() => filterCategory('Technology')} />
-            </Link>
+            {/* <Link to="/store"> */}
+            <ArrowButton
+              onClick={() => {
+                navigate('/store'), filterCategory('Technology');
+              }}
+            />
+            {/* </Link> */}
           </div>
           <div className="w-[465px] h-[390px] p-16 border rounded-[56px] flex flex-col items-start gap-9 bg-neutral-100">
             <div>
@@ -73,9 +78,13 @@ export default function HomePage() {
                 Technology
               </p>
             </div>
-            <Link to="/store">
-              <ArrowButton onClick={() => filterCategory('Technology')} />
-            </Link>
+            {/* <Link to="/store"> */}
+            <ArrowButton
+              onClick={() => {
+                filterCategory('Technology'), navigate('/store');
+              }}
+            />
+            {/* </Link> */}
           </div>
           <div className="w-[815px] h-[390px] p-16 border rounded-[56px] flex flex-col items-start gap-9 bg-neutral-100">
             <div>

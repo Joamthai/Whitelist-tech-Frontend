@@ -6,7 +6,7 @@ import useProduct from '../hooks/use-product';
 
 export default function CheckoutPage() {
   const [file, setFile] = useState(null);
-  const [input, setInput] = useState('');
+  const [input] = useState('');
   const params = useParams();
   const orderId = +params.id;
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export default function CheckoutPage() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center gap-40 my-20">
+    <div className="flex justify-center items-center gap-40 my-2 min-h-[563px]">
       <form
         onSubmit={handleSubmitForm}
         className="flex flex-col justify-center items-center gap-4"

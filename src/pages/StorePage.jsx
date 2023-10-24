@@ -4,8 +4,9 @@ import useProduct from '../hooks/use-product';
 import { useEffect } from 'react';
 
 export default function StorePage() {
-  const { allCategory, filterCategory } = useProduct();
+  const { allCategory, filterCategory, getProducts } = useProduct();
   useEffect(() => {
+    getProducts();
     window.scrollTo(0, 0);
   }, []);
 
